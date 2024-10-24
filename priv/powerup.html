@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Powerup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>MTG Cube Importer</h1>
+    <form id="cubeForm">
+      <div class="form-group">
+        <label for="cubeId">Enter CubeCobra CubeID:</label>
+        <input type="text" id="cubeId" name="cubeId" required>
+      </div>
+      <button type="button" onclick="makeTierList()">Make Tier List</button>
+      <button type="button" onclick="linkToCard()">Link to Card</button>
+      <button type="button" onclick="sideboard()">Sideboard</button>
+      <button type="button" onclick="buildaround()">Buildaround</button>
+    </form>
+  </div>
+
+  <script>
+    async function getCubeIdDigest(cubeId, digestLength) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(cubeId);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      return hashHex.slice(0, digestLength);
+    }
+
+    async function makeTierList(boardId) {
+      const cubeId = document.getElementById('cubeId').value;
+      if (cubeId) {
+        const cubeShortId = await getCubeIdDigest(cubeId, 3);
+        // Generate A-F trello card stacks prefixed with cubeShortId using Trello API
+
+        // Logic to import CubeCobra CubeID, create card groups, and import MTG cards into Trello
+        alert('Tier list created for CubeID: ' + cubeId + '(' + cubeShortId + ')' + ' at board: ' + boardId);
+      } else {
+        alert('Please enter a CubeID.');
+      }
+    }
+
+    function linkToCard() {
+      // Logic to cross-reference synergistic cards
+      alert('Link to card action triggered.');
+    }
+
+    function sideboard() {
+      // Logic to note that some card is a silver bullet
+      alert('Sideboard action triggered.');
+    }
+
+    function buildaround() {
+      // Logic to note that you should take this card early and build around it
+      alert('Buildaround action triggered.');
+    }
+
+    TrelloPowerup.initialize({
+      'board-buttons': function (t, opts) {
+        return [
+          {
+            icon: 'fa fa-cube',
+            condition: 'always',
+            text: 'Make Tier List',
+            callback: (t) => {
+              t.board('id').then(boardId => makeTierList(boardId))
+            }
+
+          }
+        ]
+      }
+    })
+  </script>
+</body>
+
+</html>

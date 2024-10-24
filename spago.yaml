@@ -1,0 +1,14 @@
+package:
+  name: purs
+  dependencies:
+    - console
+    - effect
+    - httpurple
+    - prelude
+  test:
+    main: Test.Main
+    dependencies: []
+workspace:
+  packageSet:
+    registry: 60.6.0
+  extraPackages: {}

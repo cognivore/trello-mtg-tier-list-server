@@ -93,19 +93,14 @@
     }
 
     TrelloPowerup.initialize({
-      'board-buttons': function (t, opts) {
-        return [
-          {
-            icon: 'fa fa-cube',
-            condition: 'always',
-            text: 'Make Tier List',
-            callback: (t) => {
-              t.board('id').then(boardId => makeTierList(boardId))
-            }
-
-          }
-        ]
-      }
+      'board-buttons': (t, opts) => [
+        {
+          icon: 'fa fa-cube',
+          condition: 'always',
+          text: 'Make Tier List',
+          callback: (t) => t.board('id').then(boardId => makeTierList(boardId))
+        }
+      ]
     })
   </script>
 </body>
